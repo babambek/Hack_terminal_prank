@@ -1,0 +1,302 @@
+<!DOCTYPE html><html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>H4CK3R • Mega Hack Terminal prank ++</title>
+<style>
+:root{
+  --bg:#000;
+  --fg:#ff4444;
+  --muted:#2b0a0a;
+  --accent:#ff8888;
+  --danger:#ff3b3b;
+  --warn:#ffd43b;
+  --good:#7CFC00;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:"Courier New",ui-monospace,Menlo,Monaco,monospace;
+  overflow:auto;
+}
+#matrix{position:fixed; inset:0; z-index:0; background:#000}.wrap{position:relative; z-index:1; height:100%; display:grid; grid-template-rows:auto 1fr auto} header{ display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:2px solid var(--fg); background:rgba(0,0,0,.6); backdrop-filter: blur(3px); } header h1{margin:0; letter-spacing:2px; font-weight:800; font-size:22px; text-shadow:0 0 10px var(--accent); position:relative} header .blink{animation:blink 1s step-end infinite} @keyframes blink{50%{opacity:.2}}
+
+/* glitch title */ .glitch{position:relative; display:inline-block} .glitch::before,.glitch::after{content:attr(data-text); position:absolute; left:0; top:0; width:100%; overflow:auto; clip-path:inset(0 0 0 0);} .glitch::before{left:2px; text-shadow:-2px 0 #ff0000; animation:gl1 2s infinite ease-in-out} .glitch::after{left:-2px; text-shadow:2px 0 #ffa500; animation:gl2 2.5s infinite ease-in-out} @keyframes gl1{0%,100%{clip-path:inset(0 0 0 0)} 20%{clip-path:inset(0 0 80% 0)} 40%{clip-path:inset(10% 0 0 0)} 60%{clip-path:inset(0 0 30% 0)} 80%{clip-path:inset(60% 0 0 0)}} @keyframes gl2{0%,100%{clip-path:inset(0 0 0 0)} 15%{clip-path:inset(70% 0 0 0)} 35%{clip-path:inset(0 0 20% 0)} 55%{clip-path:inset(40% 0 0 0)} 75%{clip-path:inset(0 0 60% 0)}}
+
+.badge{margin-left:auto; font-size:12px; padding:4px 8px; border:1px solid var(--fg); border-radius:999px; opacity:.9} .toggle{margin-left:0; border:1px solid var(--fg); background:transparent; color:var(--fg); border-radius:10px; padding:6px 10px; cursor:pointer} .toggle:hover{box-shadow:0 0 20px #ff4444aa}
+
+.grid{display:grid; grid-template-columns: 340px 1fr; gap:12px; height:100%; padding:12px; align-items:stretch} @media (max-width:900px){.grid{grid-template-columns:1fr; grid-auto-rows:min-content}}
+
+.panel{ background:rgba(0,0,0,.55); border:1px solid var(--muted); border-radius:14px; overflow:hidden; box-shadow:0 0 18px #ff222244; } .panel h3{margin:0; padding:10px 12px; font-size:14px; letter-spacing:1px; border-bottom:1px solid var(--muted); background:rgba(43,10,10,.35)} .panel .content{padding:10px}
+
+.btn{ width:100%; background:transparent; color:var(--fg); border:1px solid var(--fg); border-radius:12px; padding:10px 12px; margin:6px 0; font-size:14px; cursor:pointer; transition:transform .05s ease, background .2s, box-shadow .25s, filter .2s; } .btn:hover{background:var(--muted); box-shadow:0 0 30px #ff4444aa, inset 0 0 12px #ff444466; filter:brightness(1.1)} .btn:active{transform:translateY(1px)}
+
+.row{display:flex; gap:8px} .row .btn{flex:1}
+
+#terminal{ height:100%; padding:10px; font-size:13px; line-height:1.45; overflow:auto; white-space:pre-wrap; text-shadow:0 0 6px #ff444455; } #terminal b{color:var(--accent)} .ok{color:var(--accent)} .warn{color:var(--warn)} .err{color:var(--danger)} .good{color:var(--good)}
+
+.inputline{display:flex; gap:6px; padding:8px; align-items:center} .inputline input{ flex:1; background:#000; border:1px solid var(--muted); color:var(--fg); padding:8px; font-family:inherit; font-size:13px; border-radius:10px; } .inputline button{padding:8px 12px; font-size:13px} .suggest{opacity:.4; position:absolute; pointer-events:none; transform:translate(12px,0);} .inputwrap{position:relative; flex:1;} .datalist{display:flex; gap:6px; flex-wrap:wrap; font-size:11px; opacity:.7}
+
+footer{display:flex; gap:12px; align-items:center; padding:10px 12px; border-top:1px solid var(--muted); background:rgba(0,0,0,.6)} .statusdot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent)} .tiny{font-size:11px;opacity:.75}
+
+/* crash flash */ #flash{position:fixed; inset:0; background:#ff0000; opacity:0; pointer-events:none; z-index:5} .flash{animation:flash .5s ease-in-out 1} @keyframes flash{0%{opacity:0} 30%{opacity:.7} 100%{opacity:0}}
+
+/* collapsible side */ #side.collapsed{max-height:0; overflow:hidden; border-width:0; padding:0}
+
+/* progress bar style */ .bar{display:inline-block; border:1px solid var(--fg); border-radius:8px; padding:2px 4px; min-width:120px} .fill{display:inline-block; background:var(--accent); height:8px; border-radius:6px}
+
+/* mini tooltip */ .tip{font-size:10px; opacity:.7} </style>
+</head>
+<body>
+(<canvas id="matrix" aria-hidden="true"></canvas>
+<canvas id="matrix" aria-hidden="true"></canvas>
+<div id="flash"></div>
+<div class="wrap">
+  <header>
+    <button class="toggle" id="toggleSide" title="Tampilkan/Sembunyikan Modules">☰</button>
+    <div class="statusdot" aria-hidden="true"></div>
+    <h1 class="glitch" data-text="H4CK3R TERMINAL ++">H4CK3R <span class="blink">▉</span> TERMINAL ++</h1>
+    <span class="badge">bugx by <b>zamx888</b></span>
+  </header>
+  <main class="grid">
+    <section class="panel" id="side">
+      <h3>CONTROL • Modules</h3>
+      <div class="content">
+        <button class="btn" onclick="cmdVirbux()">Virbux Zamx98</button>
+        <button class="btn" onclick="cmdSuperForceClose()">Super Force Close 2.0</button>
+        <button class="btn" onclick="cmdScanIP()">IP Hunter 404</button>
+        <button class="btn" onclick="cmdMatrixShot()">Matrix Rain</button>
+        <button class="btn" onclick="cmdVirusUpload()">Upload Virus</button>
+        <div class="row">
+          <button class="btn" onclick="cmdFirewallBypass()">Firewall Bypass</button>
+          <button class="btn" onclick="cmdRootkit()">Deep Scan Rootkit</button>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="cmdCrypto()">Crypto Miner</button>
+          <button class="btn" onclick="cmdCrash()">System Crash Sim</button>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="cmdScanPort()">Port Scanner</button>
+          <button class="btn" onclick="cmdTrace()">Trace Route</button>
+        </div>
+        <div class="row">
+          <button class="btn" onclick="cmdDecrypt()">Decrypt Payload</button>
+          <button class="btn" onclick="cmdWhoami()">whoami</button>
+        </div>
+        <button class="btn" onclick="clearTerminal()">Bersihkan Terminal</button>
+        <div class="tip">Shortcut: <b>[M]</b> Matrix, <b>[C]</b> Clear, <b>[F]</b> Force Close, <b>[H]</b> Help, <b>[↑/↓]</b> history, <b>[Tab]</b> auto-complete</div>
+      </div>
+    </section>
+    <section class="panel" style="display:grid; grid-template-rows:auto 1fr auto; min-height:240px;">
+      <h3>TERMINAL • Output</h3>
+      <div id="terminal" class="content" aria-live="polite"></div>
+      <div class="inputline">
+        <div class="inputwrap">
+          <input id="cmdInput" placeholder="Masukkan perintah (ex: help)" autocomplete="off" spellcheck="false" />
+          <div id="suggest" class="suggest"></div>
+        </div>
+        <button onclick="runCmd()">Run</button>
+      </div>
+      <div class="content datalist" id="hintList"></div>
+    </section>
+  </main>
+  <footer>
+    <h4 style="text-align: center;">dibuat
+    oleh
+    azam ganteng</h4>
+    <span class="tiny">v6.0 • Zamxking Web developer.</span>
+    <span class="tiny">Shortcut: <b>[M]</b> Matrix, <b>[C]</b> Clear, <b>[F]</b> Force Close, <b>[H]</b> Help</span>
+  </footer>
+</div><script>
+const term=document.getElementById('terminal');
+let audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+let cmdHistory = JSON.parse(localStorage.getItem('hacker_history')||'[]');
+let histIndex = cmdHistory.length;
+const ALL_CMDS = [
+  'virbux','forceclose','scanip','matrix','virus','firewall','rootkit','crypto','crash','clear','help',
+  'scanport','whoami','trace','decrypt','about'
+];
+
+// ====== Logging ======
+function timestamp(){let d=new Date();return `[${d.toLocaleTimeString()}]`}
+function log(t,type='ok'){
+  if(term.children.length>300) term.removeChild(term.firstChild);
+  let el=document.createElement("div");
+  el.innerHTML=timestamp()+" "+t;
+  term.appendChild(el);
+  el.scrollIntoView({behavior:"smooth"});
+  playBeep(type);
+}
+function sep(){log("───────────────────────────────────────────────");}
+function clearTerminal(){term.textContent=''; log('[init] hacker@mega:~$ ready…');}
+
+// ====== Commands (buttons) ======
+function cmdVirbux(){sep(); log("Mencuri password..."); setTimeout(()=>log('[virbux zamyx98] Password ditemukan ✔','ok'),1200);}
+function cmdScanIP(){sep(); log('[IP Hunter] Target: '+randomIP());}
+function cmdMatrixShot(){sep(); let r=''; for(let i=0;i<30;i++){r+=randomHex(6)+' ';} log(r);} 
+function cmdVirusUpload(){sep(); progressTask('Upload', 40, 150, ()=>log('Virus Uploaded to 822-1886-0744 ✔ Type: Spyware','ok'));}
+function cmdFirewallBypass(){sep(); log('[Bypass] Firewall disabled ✔');}
+function cmdRootkit(){sep(); log('[RootkitScan] Hook ditemukan: sys_'+randomHex(4));}
+function cmdCrypto(){sep(); log('[Miner] Running at '+(20+Math.random()*5).toFixed(1)+' MH/s');}
+function cmdCrash(){sep(); log('<span class="err">[CRITICAL] Kernel panic</span>','err'); flash();}
+function cmdScanPort(){sep(); log('[PortScan] Memulai pemindaian...'); setTimeout(()=>{
+  const ports=[21,22,25,53,80,110,143,443,3306,3389,8080];
+  ports.forEach(p=>{
+    const open=Math.random()>0.5; const ms=(10+Math.random()*120)|0;
+    log(`› port ${p}/tcp — ${open?'<span class="good">OPEN</span>':'<span class="warn">CLOSED</span>'} (${ms} ms)`);
+  });
+},300)}
+function cmdWhoami(){sep(); log('user: Handphone'); log('host: mega.h4ck'); log('uid: 0 (superuser)');}
+function cmdTrace(){sep(); log('[trace] Melacak rute...'); let hops=(6+Math.random()*6)|0; let i=1; let id=setInterval(()=>{
+  if(i>hops){clearInterval(id); log('[trace] selesai ✔'); return}
+  log(`${i}  ${randomIP()}   ${(5+Math.random()*90).toFixed(2)} ms`); i++;},180)}
+function cmdDecrypt(){sep(); log('[decrypt] memproses kunci...'); progressTask('Decrypt', 55, 120, ()=>{log('[decrypt] <span class="good">BERHASIL</span> — kunci: '+randomHex(32))});}
+
+// ====== CLI ======
+function cmdHelp(){sep();
+  log('Available: '+ALL_CMDS.join(', '));
+  log('Tips: gunakan <b>Tab</b> untuk auto-complete, <b>↑/↓</b> riwayat.');
+}
+function runCmd(){
+  let input=document.getElementById("cmdInput");
+  let cmd=input.value.trim().toLowerCase();
+  if(!cmd) return;
+  addHistory(cmd);
+  input.value=""; updateSuggest();
+  switch(cmd){
+    case "virbux": cmdVirbux(); break;
+    case "scanip": cmdScanIP(); break;
+    case "matrix": cmdMatrixShot(); break;
+    case "virus": cmdVirusUpload(); break;
+    case "firewall": cmdFirewallBypass(); break;
+    case "rootkit": cmdRootkit(); break;
+    case "crypto": cmdCrypto(); break;
+    case "crash": cmdCrash(); break;
+    case "clear": clearTerminal(); break;
+    case "help": cmdHelp(); break;
+    case "forceclose": cmdSuperForceClose(); break;
+    case "scanport": cmdScanPort(); break;
+    case "whoami": cmdWhoami(); break;
+    case "trace": cmdTrace(); break;
+    case "decrypt": cmdDecrypt(); break;
+    case "about": sep(); log('H4CK3R TERMINAL ++ by ZAMX888 — prank only.'); break;
+    default: log(`<span class='warn'>Command tidak dikenal: ${cmd}</span>`,'warn');
+  }
+}
+
+// ====== Overlay (Force Close) ======
+function cmdSuperForceClose(){
+  sep();
+  progressTask('Force Close', 45, 140, ()=>{
+    log('<span class="good">Super Force Close berhasil ✔</span>','good');
+  });
+}
+// ====== Shortcuts & typing SFX ======
+document.addEventListener('keydown',e=>{
+  const inp=document.getElementById('cmdInput');
+  if(document.activeElement===inp){
+    if(e.key==='ArrowUp'){e.preventDefault(); navigateHistory(-1);}
+    if(e.key==='ArrowDown'){e.preventDefault(); navigateHistory(1);} 
+    if(e.key==='Tab'){e.preventDefault(); acceptSuggest();}
+    if(e.key.length===1) typeTick();
+    if(e.key==='Enter') runCmd();
+  } else {
+    if(e.key.toLowerCase()==='m')cmdMatrixShot();
+    if(e.key.toLowerCase()==='c')clearTerminal();
+    if(e.key.toLowerCase()==='f')cmdSuperForceClose();
+    if(e.key.toLowerCase()==='h')cmdHelp();
+  }
+});
+
+// ====== History ======
+function addHistory(cmd){cmdHistory.push(cmd); if(cmdHistory.length>200) cmdHistory.shift(); histIndex=cmdHistory.length; localStorage.setItem('hacker_history',JSON.stringify(cmdHistory));}
+function navigateHistory(dir){ if(!cmdHistory.length) return; histIndex=Math.max(0,Math.min(cmdHistory.length, histIndex+dir)); const inp=document.getElementById('cmdInput'); inp.value = cmdHistory[histIndex]||''; setTimeout(updateSuggest,0);}
+
+// ====== Suggest ======
+const suggestEl = document.getElementById('suggest');
+const hintList = document.getElementById('hintList');
+function updateSuggest(){
+  const inp=document.getElementById('cmdInput');
+  const v=inp.value.trim().toLowerCase();
+  hintList.innerHTML='';
+  if(!v){ suggestEl.textContent=''; hintList.append(...ALL_CMDS.slice(0,8).map(makeHint)); return; }
+  const match=ALL_CMDS.find(c=>c.startsWith(v));
+  suggestEl.textContent = match? v + match.slice(v.length) : '';
+  ALL_CMDS.filter(c=>c.startsWith(v)).slice(0,8).map(makeHint).forEach(h=>hintList.append(h));
+}
+function acceptSuggest(){ const inp=document.getElementById('cmdInput'); const v=inp.value.trim().toLowerCase(); const m=ALL_CMDS.find(c=>c.startsWith(v)); if(m){ inp.value=m; updateSuggest(); typeTick(); }}
+function makeHint(txt){ const s=document.createElement('span'); s.textContent=txt; s.className='tiny'; s.style.border='1px solid var(--muted)'; s.style.borderRadius='999px'; s.style.padding='2px 6px'; return s; }
+
+document.getElementById('cmdInput').addEventListener('input',updateSuggest);
+
+// ====== Randoms ======
+function randomIP(){return Array(4).fill(0).map(()=>Math.floor(Math.random()*256)).join('.')}
+function randomHex(len=4){return Array.from({length:len},()=>Math.floor(Math.random()*16).toString(16)).join('')}
+
+// ====== Sounds ======
+function playBeep(type='ok'){
+  let o=audioCtx.createOscillator(); let g=audioCtx.createGain();
+  o.type='square'; 
+  if(type==='err') o.frequency.value=120;
+  else if(type==='warn') o.frequency.value=260;
+  else o.frequency.value=440;
+  o.connect(g); g.connect(audioCtx.destination);
+  o.start();
+  g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.2);
+  o.stop(audioCtx.currentTime+0.22);
+}
+function typeTick(){ // subtle click on keypress
+  let o=audioCtx.createOscillator(); let g=audioCtx.createGain();
+  o.type='triangle'; o.frequency.value=880; o.connect(g); g.connect(audioCtx.destination);
+  g.gain.setValueAtTime(0.05,audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001,audioCtx.currentTime+0.05);
+  o.start(); o.stop(audioCtx.currentTime+0.06);
+}
+
+function flash(){ const f=document.getElementById('flash'); f.classList.remove('flash'); void f.offsetWidth; f.classList.add('flash'); }
+
+// ====== Progress helper ======
+function progressTask(label, steps=50, delay=120, done){
+  let cur=0; let id=setInterval(()=>{
+    cur += Math.floor(Math.random()*4)+1; if(cur>100) cur=100;
+    const bar = `<span class="bar"><span class="fill" style="width:${cur}%"></span></span> ${cur}%`;
+    log(`${label} ${bar}`);
+    if(cur>=100){ clearInterval(id); if(done) setTimeout(done,120);} 
+  }, delay);
+}
+
+// ====== Matrix Effect ======
+const canvas=document.getElementById('matrix'); const ctx=canvas.getContext('2d');
+let w,h,cols,ypos,speed;
+function resize(){w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; cols=Math.floor(w/14); ypos=Array(cols).fill(0); speed=Array(cols).fill(0).map(()=>2+Math.random()*3);} 
+resize(); window.addEventListener('resize',resize);
+const chars='01░█▓▒abcdef0123456789#@';
+function draw(){
+  ctx.fillStyle='rgba(0,0,0,0.08)'; ctx.fillRect(0,0,w,h);
+  ctx.font='14px monospace';
+  for(let i=0;i<cols;i++){
+    const text=chars[Math.floor(Math.random()*chars.length)];
+    const x=i*14, y=ypos[i]*14;
+    let grad=ctx.createLinearGradient(0,0,0,14);
+    grad.addColorStop(0,"#ff0000"); grad.addColorStop(1,"#ff9900");
+    ctx.fillStyle=grad;
+    if(Math.random()>0.995 && y>14) ctx.fillText('ACCESS',x,y-14);
+    ctx.fillText(text,x,y);
+    if(y>h && Math.random()>0.975){ypos[i]=0;} else{ypos[i]+=speed[i];}
+  }
+  requestAnimationFrame(draw);
+}
+draw();
+
+// ====== Side toggle ======
+const side=document.getElementById('side');
+document.getElementById('toggleSide').addEventListener('click',()=>{
+  side.classList.toggle('collapsed');
+});
+
+// Init
+clearTerminal(); log('H4CK3R OS build@mega — READY'); cmdHelp();
+updateSuggest();
+</script></body>
+</html>
